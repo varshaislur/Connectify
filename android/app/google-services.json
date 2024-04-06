@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "367804537019",
+    "project_id": "crudapp-1d1e5",
+    "storage_bucket": "crudapp-1d1e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367804537019:android:fe2b60e08cf9623ce9319e",
+        "android_client_info": {
+          "package_name": "com.example.connectify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCb2ghNmg-Zsc8i738vyA7ubHLsn1SYeEE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
