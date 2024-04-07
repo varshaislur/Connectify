@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectify/components/comment.dart';
+import 'package:connectify/components/delete_button.dart';
 import 'package:connectify/components/like_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/cupertino.dart';
@@ -89,6 +90,30 @@ class _WallPostState extends State<WallPost> {
 
     ));
   }
+  void deletePost()async{
+    //delete the comments from that post, because only deleting the post doesnt delete the comments
+  final commentDocs= await FirebaseFirestore.instance.collection("posts").doc(widget.postId).collection("comments").get();
+
+       for (var doc in commentDocs.docs){
+         await FirebaseFirestore.instance.collection("posts").doc(widget.postId).collection("comments").doc(doc.id).delete();
+  }
+
+    //delete the post
+    await FirebaseFirestore.instance.collection("posts").doc(widget.postId).delete().then((value) => print("post deleted")).catchError((error)=>print(error));
+  }
+
+  void deletePostDialog(){
+    showDialog(context: context, builder: (context)=>AlertDialog(
+      title: Text("Delete Post"),
+      content: Text("Are you sure you want to delete the post?"),
+      actions: [
+        TextButton(onPressed: deletePost, child: Text("Delete")),
+        TextButton(onPressed: (){
+          Navigator.pop(context);
+        }, child: Text("Cancel"))
+      ],
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,15 +172,29 @@ class _WallPostState extends State<WallPost> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Container(
-                height: 50,
-                width:50,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.black,
+              child: Column(
+                children: [
+                  //profile icon and delete icon based on condition that the person who has posted is the person deleting the post
 
-                ),
-                child: Icon(Icons.person,color: Colors.white.withOpacity(0.5),),
+                  if(widget.user==currentUser.email)
+                    DeleteButton(onTap: deletePostDialog),
+
+                  //profile icon and delete icon based on condition that the person who has posted is the person deleting the post
+
+                  Container(
+                    height: 50,
+                    width:50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.black,
+
+                    ),
+
+
+
+                    child: Icon(Icons.person,color: Colors.white.withOpacity(0.5),)
+                  ),
+                ],
               ),
             ),
             Expanded(
